@@ -53,6 +53,18 @@ class ImageBasics extends Frame {
                 int s = b & 0xff;
                 System.out.printf(s + " ");
             }
+
+            byte[] decoded = decodeRunLength(encoded);
+            System.out.println("\nDECODED BYTE ARRAY:");
+            for (byte b : decoded) {
+                int s = b & 0xff;
+                System.out.printf(s + " ");
+            }
+
+            // write the decoded byteArray to a file
+            ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
+            BufferedImage rle = ImageIO.read(bais);
+            ImageIO.write(rle, "jpg", new File("rle.jpg") );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,6 +106,16 @@ class ImageBasics extends Frame {
         }
         dest.write((byte) matchCount);
         dest.write((byte) lastByte);
+        return dest.toByteArray();
+    }
+
+    public byte[] decodeRunLength(byte[] encoded) {
+        ByteArrayOutputStream dest = new ByteArrayOutputStream();
+        for (int i = 0; i < encoded.length; i = i + 2) {
+            for (int j = 0; j < encoded[i]; j++) {
+                dest.write((byte) encoded[i + 1]);
+            }
+        }
         return dest.toByteArray();
     }
 

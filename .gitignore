@@ -1,5 +1,8 @@
 .DS_Store
 
+# 'out' folders
+*/out/
+
 # Compiled class file
 *.class
 
