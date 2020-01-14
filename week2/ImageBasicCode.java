@@ -5,6 +5,7 @@
  Digital Representation of Visual Information.
 
  **********************************************************/
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Frame;
@@ -22,184 +23,189 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 class ImageBasics extends Frame {
-	BufferedImage testImage;
+    BufferedImage testImage;
 
-	BufferedImage redChannel; // red channel
-	BufferedImage greenChannel; // green channel
-	BufferedImage blueChannel; // blue channel
-	BufferedImage restoredImg; // restored image
+    BufferedImage redChannel; // red channel
+    BufferedImage greenChannel; // green channel
+    BufferedImage blueChannel; // blue channel
+    BufferedImage restoredImg; // restored image
 
-	BufferedImage redChannel_reduced; // red channel with reduced bit-depth
-	BufferedImage greenChannel_reduced; // green channel with reduced bit-depth
-	BufferedImage blueChannel_reduced; // blue channel with reduced bit-depth
-	BufferedImage restoredImg_reduced; // restored image with reduced bit-depth
+    BufferedImage redChannel_reduced; // red channel with reduced bit-depth
+    BufferedImage greenChannel_reduced; // green channel with reduced bit-depth
+    BufferedImage blueChannel_reduced; // blue channel with reduced bit-depth
+    BufferedImage restoredImg_reduced; // restored image with reduced bit-depth
 
-	BufferedImage hue_img; // hue image
-	BufferedImage saturation_img; // saturation image
-	BufferedImage value_img; // value image
+    BufferedImage hue_img; // hue image
+    BufferedImage saturation_img; // saturation image
+    BufferedImage value_img; // value image
 
-	int width; // width of the image
-	int height; // height of the image
+    int width; // width of the image
+    int height; // height of the image
 
-	public ImageBasics() {
-		// constructor
-		// Get an image from the specified file in the current directory on the
-		// local hard disk.
-		try {
-			testImage = ImageIO.read(new File("bird1.jpg"));
+	
 
-		} catch (Exception e) {
-			System.out.println("Cannot load the provided image");
-		}
-		this.setTitle("Week 2 workshop - RGB representation");
-		this.setVisible(true);
+    public ImageBasics() {
+        // constructor
+        // Get an image from the specified file in the current directory on the
+        // local hard disk.
+        try {
+            testImage = ImageIO.read(new File("bird1.jpg"));
 
-		width = testImage.getWidth();
-		height = testImage.getHeight();
+        } catch (Exception e) {
+            System.out.println("Cannot load the provided image");
+        }
+        this.setTitle("Week 2 workshop - RGB representation");
+        this.setVisible(true);
 
-		redChannel = filterImage(testImage, Filters.red);
-		greenChannel = filterImage(testImage, Filters.green);
-		blueChannel = filterImage(testImage, Filters.blue);
-		restoredImg = filterImage(testImage, Filters.restored);
+        width = testImage.getWidth();
+        height = testImage.getHeight();
 
-		redChannel_reduced = filterImage(testImage, Filters.reducedRed);
-		greenChannel_reduced = filterImage(testImage, Filters.reducedGreen);
-		blueChannel_reduced = filterImage(testImage, Filters.reducedBlue);
-		restoredImg_reduced = filterImage(testImage, Filters.reducedAll);
+        redChannel = filterImage(testImage, Filters.red);
+        greenChannel = filterImage(testImage, Filters.green);
+        blueChannel = filterImage(testImage, Filters.blue);
+        restoredImg = filterImage(testImage, Filters.restored);
 
-		hue_img = filterImage(testImage, Filters.hue);
-		saturation_img = filterImage(testImage, Filters.saturation);
-		value_img = filterImage(testImage, Filters.value);
+        redChannel_reduced = filterImage(testImage, Filters.reducedRed);
+        greenChannel_reduced = filterImage(testImage, Filters.reducedGreen);
+        blueChannel_reduced = filterImage(testImage, Filters.reducedBlue);
+        restoredImg_reduced = filterImage(testImage, Filters.reducedAll);
 
-		//Anonymous inner-class listener to terminate program
-		this.addWindowListener(
-				new WindowAdapter(){//anonymous class definition
-					public void windowClosing(WindowEvent e){
-						System.exit(0);//terminate the program
-					}//end windowClosing()
-				}//end WindowAdapter
-				);//end addWindowListener
-	}// end constructor
+        hue_img = filterImage(testImage, Filters.hue);
+        saturation_img = filterImage(testImage, Filters.saturation);
+        value_img = filterImage(testImage, Filters.value);
 
-	public BufferedImage filterImage (BufferedImage img, Filters filt)
-	//produce the result image for each operation
-	{
-		int width = img.getWidth();
-		int height = img.getHeight();
+        //Anonymous inner-class listener to terminate program
+        this.addWindowListener(
+                new WindowAdapter() {//anonymous class definition
+                    public void windowClosing(WindowEvent e) {
+                        System.exit(0);//terminate the program
+                    }//end windowClosing()
+                }//end WindowAdapter
+        );//end addWindowListener
+    }// end constructor
 
-		WritableRaster wRaster = img.copyData(null);
-		BufferedImage copy = new BufferedImage(img.getColorModel(), wRaster, img.isAlphaPremultiplied(), null);
+    public BufferedImage filterImage(BufferedImage img, Filters filt)
+    //produce the result image for each operation
+    {
+        int width = img.getWidth();
+        int height = img.getHeight();
 
-		//apply the operation to each pixel
-		for (int i = 0; i < width; i++){
-			for (int j = 0; j < height; j++) {
-				int rgb = img.getRGB(i, j);
-				copy.setRGB(i, j, filterPixel(rgb, filt));}}
-		return copy;
-	}
+        WritableRaster wRaster = img.copyData(null);
+        BufferedImage copy = new BufferedImage(img.getColorModel(), wRaster, img.isAlphaPremultiplied(), null);
 
-	public int filterPixel(int rgb, Filters filt) { //operation to be applied to each pixel, for obtaining the channels, reduced bit-depth image and HSV image
-		Color c = new Color (rgb);
-		float[] hsv = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+        //apply the operation to each pixel
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                int rgb = img.getRGB(i, j);
+                copy.setRGB(i, j, filterPixel(rgb, filt));
+            }
+        }
+        return copy;
+    }
 
-		switch (filt) {
-			case red:
-				return rgb & 0xFFFF0000;
+    public int filterPixel(int rgb, Filters filt) { //operation to be applied to each pixel, for obtaining the channels, reduced bit-depth image and HSV image
+        Color c = new Color(rgb);
+        float[] hsv = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
 
-			case green:
-				return rgb & 0xFF00FF00;
+        switch (filt) {
+            case red:
+                return rgb & 0xFFFF0000;
 
-		case blue:
-			return rgb & 0xFF0000FF;
+            case green:
+                return rgb & 0xFF00FF00;
 
-		case restored:
-			return rgb & 0xFFFF0000 | rgb & 0xFF00FF00 | rgb & 0xFF0000FF;
+            case blue:
+                return rgb & 0xFF0000FF;
 
-		case reducedRed://reducing to 3 bits
-			return rgb & 0xFFE00000;
+            case restored:
+                return rgb & 0xFFFF0000 | rgb & 0xFF00FF00 | rgb & 0xFF0000FF;
 
-		case reducedGreen://reducing to 3 bits
-			return rgb & 0xFF00E000;
+            case reducedRed://reducing to 3 bits
+                return rgb & 0xFFE00000;
 
-		case reducedBlue://reducing to 3 bits
-			return rgb & 0xFF0000E0;
+            case reducedGreen://reducing to 3 bits
+                return rgb & 0xFF00E000;
 
-		case reducedAll:
-			return rgb & 0xFFE00000 | rgb & 0xFF00E000 | rgb & 0xFF0000E0;
+            case reducedBlue://reducing to 3 bits
+                return rgb & 0xFF0000E0;
 
-		case hue:
-			return Color.HSBtoRGB(hsv[0], 1.0F, 1.0F);
+            case reducedAll:
+                return rgb & 0xFFE00000 | rgb & 0xFF00E000 | rgb & 0xFF0000E0;
 
-		case saturation:
-			Color sat = new Color(hsv[1], hsv[1], hsv[1]);
-			return sat.getRGB();
+            case hue:
+                return Color.HSBtoRGB(hsv[0], 1.0F, 1.0F);
 
-		case value:
-			Color val = new Color(hsv[2],hsv[2],hsv[2]);
-			return val.getRGB();
+            case saturation:
+                Color sat = new Color(hsv[1], hsv[1], hsv[1]);
+                return sat.getRGB();
 
-		default:
-			return 0xFFFFFFFF;
-		}
-	}
+            case value:
+                Color val = new Color(hsv[2], hsv[2], hsv[2]);
+                return val.getRGB();
 
-public void paint(Graphics g) {
+            default:
+                return 0xFFFFFFFF;
+        }
+    }
 
-	//if working with different images, this may need to be adjusted
-	int w = width / 3;
-	int h = height / 3;
 
-	this.setSize(w * 5 + 300, h * 3 + 150);
+    public void paint(Graphics g) {
 
-	// original + R G B channels + restored
-	g.drawImage(testImage, 10, 50, w, h, this);
-	g.drawImage(redChannel, w + 20, 50, w, h, this);
-	g.drawImage(greenChannel, w * 2 + 30, 50,w, h, this);
-	g.drawImage(blueChannel, w * 3 + 40, 50,w, h,  this);
-	g.drawImage(restoredImg, w * 4 + 50, 50,w, h,this);
+        //if working with different images, this may need to be adjusted
+        int w = width / 3;
+        int h = height / 3;
 
-	// add caption to the displayed images
-	g.setColor(Color.BLACK);
-	Font f1 = new Font("Verdana", Font.BOLD, 15);
-	g.setFont(f1);
-	g.drawString("Original image", 15, 45);
-	g.drawString("Red Channel", 15 + w + 20, 45);
-	g.drawString("Green Channel", 15 + w * 2 + 20, 45);
-	g.drawString("Blue Channel", 15 + w * 3 + 40, 45);
-	g.drawString("Restored Image", 15 + w * 4 + 50, 45);
-	g.drawString("R G B", 15 + w * 5 + 80, 45 + h / 2);
+        this.setSize(w * 5 + 300, h * 3 + 150);
 
-	 // reduced R G B + restored
-	 g.drawImage(redChannel_reduced, w+ 20, 50+h+30, w, h,this);
-	 g.drawImage(greenChannel_reduced, w*2+30, 50+h+30, w, h,this);
-	 g.drawImage(blueChannel_reduced, w*3+40, 50+h+30, w, h,this);
-	 g.drawImage(restoredImg_reduced,w*4+50,50+h+30,w, h,this);
+        // original + R G B channels + restored
+        g.drawImage(testImage, 10, 50, w, h, this);
+        g.drawImage(redChannel, w + 20, 50, w, h, this);
+        g.drawImage(greenChannel, w * 2 + 30, 50, w, h, this);
+        g.drawImage(blueChannel, w * 3 + 40, 50, w, h, this);
+        g.drawImage(restoredImg, w * 4 + 50, 50, w, h, this);
 
-	g.drawString("Red Channel-reduced", 10 + w + 20, 45 + h + 30);
-	g.drawString("Green Channel-reduced", 10 + w * 2 + 20, 45 + h + 30);
-	g.drawString("Blue Channel-reduced", 10 + w * 3 + 35, 45 + h + 30);
-	g.drawString("Restored Image-reduced", 10 + w * 4 + 40, 45 + h + 30);
+        // add caption to the displayed images
+        g.setColor(Color.BLACK);
+        Font f1 = new Font("Verdana", Font.BOLD, 15);
+        g.setFont(f1);
+        g.drawString("Original image", 15, 45);
+        g.drawString("Red Channel", 15 + w + 20, 45);
+        g.drawString("Green Channel", 15 + w * 2 + 20, 45);
+        g.drawString("Blue Channel", 15 + w * 3 + 40, 45);
+        g.drawString("Restored Image", 15 + w * 4 + 50, 45);
+        g.drawString("R G B", 15 + w * 5 + 80, 45 + h / 2);
 
-	 g.drawString("Reduced bit-depth", 20,45+h/2+h+30);
+        // reduced R G B + restored
+        g.drawImage(redChannel_reduced, w + 20, 50 + h + 30, w, h, this);
+        g.drawImage(greenChannel_reduced, w * 2 + 30, 50 + h + 30, w, h, this);
+        g.drawImage(blueChannel_reduced, w * 3 + 40, 50 + h + 30, w, h, this);
+        g.drawImage(restoredImg_reduced, w * 4 + 50, 50 + h + 30, w, h, this);
 
-	 // H S V
-	 g.drawImage(hue_img, w+ 20, 50+2*h+80, w, h,this);
-	 g.drawImage(saturation_img, w*2+30, 50+2*h+80, w, h,this);
-	 g.drawImage(value_img, w*3+40, 50+2*h+80, w, h,this);
+        g.drawString("Red Channel-reduced", 10 + w + 20, 45 + h + 30);
+        g.drawString("Green Channel-reduced", 10 + w * 2 + 20, 45 + h + 30);
+        g.drawString("Blue Channel-reduced", 10 + w * 3 + 35, 45 + h + 30);
+        g.drawString("Restored Image-reduced", 10 + w * 4 + 40, 45 + h + 30);
 
-	g.drawString("Hue component", 10 + w + 20, 45 + 2 * h + 75);
-	g.drawString("Saturation component", 10 + w * 2 + 20, 45 + 2 * h + 75);
-	g.drawString("Value component", 10 + w * 3 + 35, 45 + 2 * h + 75);
+        g.drawString("Reduced bit-depth", 20, 45 + h / 2 + h + 30);
 
-	g.drawString("H S V", 60, 45 + h / 2 + 2 * h + 70);
-}
+        // H S V
+        g.drawImage(hue_img, w + 20, 50 + 2 * h + 80, w, h, this);
+        g.drawImage(saturation_img, w * 2 + 30, 50 + 2 * h + 80, w, h, this);
+        g.drawImage(value_img, w * 3 + 40, 50 + 2 * h + 80, w, h, this);
+
+        g.drawString("Hue component", 10 + w + 20, 45 + 2 * h + 75);
+        g.drawString("Saturation component", 10 + w * 2 + 20, 45 + 2 * h + 75);
+        g.drawString("Value component", 10 + w * 3 + 35, 45 + 2 * h + 75);
+
+        g.drawString("H S V", 60, 45 + h / 2 + 2 * h + 70);
+    }
 // =======================================================//
 
-public static void main(String[] args) {
+    public static void main(String[] args) {
 
-	ImageBasics img = new ImageBasics();// instantiate this object
-	img.repaint();// render the image
+        ImageBasics img = new ImageBasics();// instantiate this object
+        img.repaint();// render the image
 
-}// end main
+    }// end main
 }
 // =======================================================//

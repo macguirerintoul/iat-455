@@ -17,6 +17,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors.Color Scheme Font" />
   </component>
   <component name="RunManager">
@@ -56,7 +57,7 @@
       <option name="presentableId" value="Default" />
       <updated>1578961990012</updated>
       <workItem from="1578961992534" duration="751000" />
-      <workItem from="1578962765595" duration="1790000" />
+      <workItem from="1578962765595" duration="2170000" />
     </task>
     <servers />
   </component>
@@ -72,22 +73,26 @@
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
     <state x="642" y="436" key="#com.intellij.ide.actions.ChooseComponentsToExportDialog/0.0.1792.1120@0.0.1792.1120" timestamp="1578962752519" />
-    <state width="1750" height="69" key="GridCell.Tab.0.bottom" timestamp="1578965216475">
+    <state x="653" y="438" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1578965968057">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
-    <state width="1750" height="69" key="GridCell.Tab.0.bottom/0.0.1792.1120@0.0.1792.1120" timestamp="1578965216475" />
-    <state width="1750" height="69" key="GridCell.Tab.0.center" timestamp="1578965216474">
+    <state x="653" y="438" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1792.1120@0.0.1792.1120" timestamp="1578965968057" />
+    <state width="1750" height="69" key="GridCell.Tab.0.bottom" timestamp="1578965891089">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
-    <state width="1750" height="69" key="GridCell.Tab.0.center/0.0.1792.1120@0.0.1792.1120" timestamp="1578965216474" />
-    <state width="1750" height="69" key="GridCell.Tab.0.left" timestamp="1578965216474">
+    <state width="1750" height="69" key="GridCell.Tab.0.bottom/0.0.1792.1120@0.0.1792.1120" timestamp="1578965891089" />
+    <state width="1750" height="69" key="GridCell.Tab.0.center" timestamp="1578965891088">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
-    <state width="1750" height="69" key="GridCell.Tab.0.left/0.0.1792.1120@0.0.1792.1120" timestamp="1578965216474" />
-    <state width="1750" height="69" key="GridCell.Tab.0.right" timestamp="1578965216475">
+    <state width="1750" height="69" key="GridCell.Tab.0.center/0.0.1792.1120@0.0.1792.1120" timestamp="1578965891088" />
+    <state width="1750" height="69" key="GridCell.Tab.0.left" timestamp="1578965891087">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
-    <state width="1750" height="69" key="GridCell.Tab.0.right/0.0.1792.1120@0.0.1792.1120" timestamp="1578965216475" />
+    <state width="1750" height="69" key="GridCell.Tab.0.left/0.0.1792.1120@0.0.1792.1120" timestamp="1578965891087" />
+    <state width="1750" height="69" key="GridCell.Tab.0.right" timestamp="1578965891088">
+      <screen x="0" y="0" width="1792" height="1120" />
+    </state>
+    <state width="1750" height="69" key="GridCell.Tab.0.right/0.0.1792.1120@0.0.1792.1120" timestamp="1578965891088" />
     <state x="397" y="199" key="SettingsEditor" timestamp="1578962905574">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
