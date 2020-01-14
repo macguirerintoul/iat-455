@@ -15,7 +15,10 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.WritableRaster;
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
@@ -42,7 +45,44 @@ class ImageBasics extends Frame {
     int width; // width of the image
     int height; // height of the image
 
-	
+    public void runLengthEncode() {
+        try {
+            byte[] encoded = encodeRunLength(imageToByteArray());
+            for(byte b : encoded){
+                int s = b & 0xff;
+                System.out.printf(s + " ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public byte[] imageToByteArray() throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(value_img, "jpg", baos);
+        byte[] ba = baos.toByteArray();
+        return ba;
+    }
+
+    public byte[] encodeRunLength(byte[] imageByteArray) throws IOException {
+        ByteArrayOutputStream dest = new ByteArrayOutputStream();
+        byte lastByte = imageByteArray[0];
+        int matchCount = 1;
+        for (int i = 1; i < imageByteArray.length; i++) {
+            byte thisByte = imageByteArray[i];
+            if (lastByte == thisByte) {
+                matchCount++;
+            } else {
+                dest.write((byte) matchCount);
+                dest.write((byte) lastByte);
+                matchCount = 1;
+                lastByte = thisByte;
+            }
+        }
+        dest.write((byte) matchCount);
+        dest.write((byte) lastByte);
+        return dest.toByteArray();
+    }
 
     public ImageBasics() {
         // constructor
@@ -205,6 +245,7 @@ class ImageBasics extends Frame {
 
         ImageBasics img = new ImageBasics();// instantiate this object
         img.repaint();// render the image
+        img.runLengthEncode();
 
     }// end main
 }
