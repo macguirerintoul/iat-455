@@ -48,7 +48,8 @@ class ImageBasics extends Frame {
     public void runLengthEncode() {
         try {
             byte[] encoded = encodeRunLength(imageToByteArray());
-            for(byte b : encoded){
+            System.out.println("ENCODED BYTE ARRAY:");
+            for (byte b : encoded) {
                 int s = b & 0xff;
                 System.out.printf(s + " ");
             }
@@ -61,6 +62,18 @@ class ImageBasics extends Frame {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write(value_img, "jpg", baos);
         byte[] ba = baos.toByteArray();
+        System.out.println("IMAGE BYTE ARRAY:");
+        for (byte b : ba) {
+            int s = b & 0xff;
+            System.out.printf(s + " ");
+        }
+        System.out.println("");
+        // write a test file to see if the image to byteArray conversion worked
+        /*
+        ByteArrayInputStream bis = new ByteArrayInputStream(ba);
+        BufferedImage bImage2 = ImageIO.read(bis);
+        ImageIO.write(bImage2, "jpg", new File("bis.jpg") );
+         */
         return ba;
     }
 
