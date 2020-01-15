@@ -25,8 +25,7 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
-import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
-import static java.awt.image.BufferedImage.TYPE_INT_RGB;
+import static java.awt.image.BufferedImage.*;
 
 class ImageBasics extends Frame {
     BufferedImage testImage;
@@ -70,7 +69,9 @@ class ImageBasics extends Frame {
         int count = 0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                rle.setRGB(i, j, decoded[count] & );
+                System.out.printf(decoded[count] + " ");
+                int rgb = Color.HSBtoRGB(0.0F,0.0F, (float) decoded[count] / (float) 100);
+                rle.setRGB(i, j, rgb);
                 count++;
             }
         }
@@ -105,12 +106,6 @@ class ImageBasics extends Frame {
             }
         }
         byte[] ba = dest.toByteArray();
-
-        System.out.println("\nIMAGE BYTE ARRAY:");
-        for (byte b : ba) {
-            int s = b & 0xff;
-//            System.out.printf(s + " ");
-        }
         return ba;
 
         /*
@@ -161,8 +156,7 @@ class ImageBasics extends Frame {
         ByteArrayOutputStream dest = new ByteArrayOutputStream();
         for (int i = 0; i < encoded.length; i = i + 2) {
             for (int j = 0; j < encoded[i]; j++) {
-                int p = Color.HSBtoRGB(0, 0, (float) ((double) encoded[i + 1] / (double) 100));
-                dest.write((byte) p);
+                dest.write((byte) encoded[i + 1]);
             }
         }
         return dest.toByteArray();
