@@ -25,6 +25,9 @@ import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
 
+import static java.awt.image.BufferedImage.TYPE_INT_ARGB;
+import static java.awt.image.BufferedImage.TYPE_INT_RGB;
+
 class ImageBasics extends Frame {
     BufferedImage testImage;
 
@@ -50,52 +53,88 @@ class ImageBasics extends Frame {
             byte[] encoded = encodeRunLength(imageToByteArray());
             byte[] decoded = decodeRunLength(encoded);
 
-            System.out.println("\nENCODED BYTE ARRAY LENGTH:");
-            System.out.println(encoded.length);
-            System.out.println("\nENCODED BYTE ARRAY:");
-            for (byte b : encoded) {
-                int s = b & 0xff;
-                System.out.printf(s + " ");
-            }
-
-            System.out.println("\n\nDECODED BYTE ARRAY LENGTH:");
-            System.out.println(decoded.length);
-            System.out.println("\nDECODED BYTE ARRAY:");
-            for (byte b : decoded) {
-                int s = b & 0xff;
-                System.out.printf(s + " ");
-            }
-
             System.out.println("\n\nCOMPRESSION RATIO:");
             double compressionRatio = encoded.length / (double) decoded.length;
             System.out.println(compressionRatio * 100 + "%");
-
-            // write the decoded byteArray to a file
-            ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
-            BufferedImage rle = ImageIO.read(bais);
-            ImageIO.write(rle, "jpg", new File("rle.jpg") );
+            byteArrayToImage(decoded);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    public BufferedImage byteArrayToImage(byte[] decoded) throws IOException {
+        // write the decoded byteArray to a file
+        BufferedImage rle = new BufferedImage(width, height, TYPE_INT_RGB);
+
+        //apply the operation to each pixel
+        int count = 0;
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                rle.setRGB(i, j, decoded[count] & );
+                count++;
+            }
+        }
+
+        ImageIO.write(rle, "jpg", new File("rle.jpg") );
+        return rle;
+
+        /*
+        for (byte b : decoded) {
+             = b & 0xff;
+            System.out.printf(s + " ");
+        }
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
+        BufferedImage rle = ImageIO.read(bais);
+
+
+         */
+    }
+
     public byte[] imageToByteArray() throws IOException {
+        ByteArrayOutputStream dest = new ByteArrayOutputStream();
+        int w = value_img.getWidth();
+        int h = value_img.getHeight();
+
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                Color c = new Color(value_img.getRGB(i, j));
+                float[] hsv = Color.RGBtoHSB(c.getRed(), c.getGreen(), c.getBlue(), null);
+                int v = (int) (hsv[2] * 100);
+                dest.write((byte) v);
+            }
+        }
+        byte[] ba = dest.toByteArray();
+
+        System.out.println("\nIMAGE BYTE ARRAY:");
+        for (byte b : ba) {
+            int s = b & 0xff;
+//            System.out.printf(s + " ");
+        }
+        return ba;
+
+        /*
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(value_img, "jpg", baos);
+        ImageIO.write(, "jpg", baos);
         byte[] ba = baos.toByteArray();
         System.out.println("IMAGE BYTE ARRAY:");
         for (byte b : ba) {
             int s = b & 0xff;
             System.out.printf(s + " ");
         }
+        System.out.println("\nIMAGE BYTE ARRAY LENGTH:");
+        System.out.println(ba.length);
         System.out.println("");
+        */
+
         // write a test file to see if the image to byteArray conversion worked
         /*
         ByteArrayInputStream bis = new ByteArrayInputStream(ba);
         BufferedImage bImage2 = ImageIO.read(bis);
         ImageIO.write(bImage2, "jpg", new File("bis.jpg") );
-         */
+
         return ba;
+        */
     }
 
     public byte[] encodeRunLength(byte[] imageByteArray) throws IOException {
@@ -122,7 +161,8 @@ class ImageBasics extends Frame {
         ByteArrayOutputStream dest = new ByteArrayOutputStream();
         for (int i = 0; i < encoded.length; i = i + 2) {
             for (int j = 0; j < encoded[i]; j++) {
-                dest.write((byte) encoded[i + 1]);
+                int p = Color.HSBtoRGB(0, 0, (float) ((double) encoded[i + 1] / (double) 100));
+                dest.write((byte) p);
             }
         }
         return dest.toByteArray();

@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8bc1b103-50fc-478d-b521-f7795d5b0bf0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ImageBasicCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/ImageBasicCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/rle.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/rle.jpg" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +22,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -68,7 +69,7 @@
       <updated>1578961990012</updated>
       <workItem from="1578961992534" duration="751000" />
       <workItem from="1578962765595" duration="12843000" />
-      <workItem from="1579115511481" duration="1014000" />
+      <workItem from="1579115511481" duration="6859000" />
     </task>
     <servers />
   </component>
@@ -92,22 +93,22 @@
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
     <state x="653" y="438" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/0.0.1792.1120@0.0.1792.1120" timestamp="1578965968057" />
-    <state width="1750" height="111" key="GridCell.Tab.0.bottom" timestamp="1579116562459">
+    <state width="1750" height="111" key="GridCell.Tab.0.bottom" timestamp="1579122877292">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
-    <state width="1750" height="111" key="GridCell.Tab.0.bottom/0.0.1792.1120@0.0.1792.1120" timestamp="1579116562459" />
-    <state width="1750" height="111" key="GridCell.Tab.0.center" timestamp="1579116562458">
+    <state width="1750" height="111" key="GridCell.Tab.0.bottom/0.0.1792.1120@0.0.1792.1120" timestamp="1579122877292" />
+    <state width="1750" height="111" key="GridCell.Tab.0.center" timestamp="1579122877291">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
-    <state width="1750" height="111" key="GridCell.Tab.0.center/0.0.1792.1120@0.0.1792.1120" timestamp="1579116562458" />
-    <state width="1750" height="111" key="GridCell.Tab.0.left" timestamp="1579116562457">
+    <state width="1750" height="111" key="GridCell.Tab.0.center/0.0.1792.1120@0.0.1792.1120" timestamp="1579122877291" />
+    <state width="1750" height="111" key="GridCell.Tab.0.left" timestamp="1579122877290">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
-    <state width="1750" height="111" key="GridCell.Tab.0.left/0.0.1792.1120@0.0.1792.1120" timestamp="1579116562457" />
-    <state width="1750" height="111" key="GridCell.Tab.0.right" timestamp="1579116562458">
+    <state width="1750" height="111" key="GridCell.Tab.0.left/0.0.1792.1120@0.0.1792.1120" timestamp="1579122877290" />
+    <state width="1750" height="111" key="GridCell.Tab.0.right" timestamp="1579122877291">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
-    <state width="1750" height="111" key="GridCell.Tab.0.right/0.0.1792.1120@0.0.1792.1120" timestamp="1579116562458" />
+    <state width="1750" height="111" key="GridCell.Tab.0.right/0.0.1792.1120@0.0.1792.1120" timestamp="1579122877291" />
     <state x="397" y="199" key="SettingsEditor" timestamp="1578962905574">
       <screen x="0" y="0" width="1792" height="1120" />
     </state>
