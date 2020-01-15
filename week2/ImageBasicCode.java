@@ -48,18 +48,27 @@ class ImageBasics extends Frame {
     public void runLengthEncode() {
         try {
             byte[] encoded = encodeRunLength(imageToByteArray());
-            System.out.println("ENCODED BYTE ARRAY:");
+            byte[] decoded = decodeRunLength(encoded);
+
+            System.out.println("\nENCODED BYTE ARRAY LENGTH:");
+            System.out.println(encoded.length);
+            System.out.println("\nENCODED BYTE ARRAY:");
             for (byte b : encoded) {
                 int s = b & 0xff;
                 System.out.printf(s + " ");
             }
 
-            byte[] decoded = decodeRunLength(encoded);
+            System.out.println("\n\nDECODED BYTE ARRAY LENGTH:");
+            System.out.println(decoded.length);
             System.out.println("\nDECODED BYTE ARRAY:");
             for (byte b : decoded) {
                 int s = b & 0xff;
                 System.out.printf(s + " ");
             }
+
+            System.out.println("\n\nCOMPRESSION RATIO:");
+            double compressionRatio = encoded.length / (double) decoded.length;
+            System.out.println(compressionRatio * 100 + "%");
 
             // write the decoded byteArray to a file
             ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
