@@ -52,9 +52,9 @@ class ImageBasics extends Frame {
             byte[] encoded = encodeRunLength(imageToByteArray());
             byte[] decoded = decodeRunLength(encoded);
 
-            System.out.println("\n\nCOMPRESSION RATIO:");
+            System.out.println("\nCOMPRESSION RATIO:");
             double compressionRatio = encoded.length / (double) decoded.length;
-            System.out.println(compressionRatio * 100 + "%");
+            System.out.println("The encoded image is " + compressionRatio * 100 + "% the size of the original image.");
             byteArrayToImage(decoded);
         } catch (Exception e) {
             e.printStackTrace();
@@ -62,14 +62,13 @@ class ImageBasics extends Frame {
     }
 
     public BufferedImage byteArrayToImage(byte[] decoded) throws IOException {
-        // write the decoded byteArray to a file
+        // turn the decoded byteArray into a BufferedImage
         BufferedImage rle = new BufferedImage(width, height, TYPE_INT_RGB);
 
-        //apply the operation to each pixel
+        // apply colour to each pixel
         int count = 0;
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
-                System.out.printf(decoded[count] + " ");
                 int rgb = Color.HSBtoRGB(0.0F,0.0F, (float) decoded[count] / (float) 100);
                 rle.setRGB(i, j, rgb);
                 count++;
@@ -78,20 +77,13 @@ class ImageBasics extends Frame {
 
         ImageIO.write(rle, "jpg", new File("rle.jpg") );
         return rle;
-
-        /*
-        for (byte b : decoded) {
-             = b & 0xff;
-            System.out.printf(s + " ");
-        }
-
-        ByteArrayInputStream bais = new ByteArrayInputStream(decoded);
-        BufferedImage rle = ImageIO.read(bais);
-
-
-         */
     }
 
+    /**
+     * Turn the image into a byte array.
+     * @return byte[]
+     * @throws IOException
+     */
     public byte[] imageToByteArray() throws IOException {
         ByteArrayOutputStream dest = new ByteArrayOutputStream();
         int w = value_img.getWidth();
@@ -107,29 +99,6 @@ class ImageBasics extends Frame {
         }
         byte[] ba = dest.toByteArray();
         return ba;
-
-        /*
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write(, "jpg", baos);
-        byte[] ba = baos.toByteArray();
-        System.out.println("IMAGE BYTE ARRAY:");
-        for (byte b : ba) {
-            int s = b & 0xff;
-            System.out.printf(s + " ");
-        }
-        System.out.println("\nIMAGE BYTE ARRAY LENGTH:");
-        System.out.println(ba.length);
-        System.out.println("");
-        */
-
-        // write a test file to see if the image to byteArray conversion worked
-        /*
-        ByteArrayInputStream bis = new ByteArrayInputStream(ba);
-        BufferedImage bImage2 = ImageIO.read(bis);
-        ImageIO.write(bImage2, "jpg", new File("bis.jpg") );
-
-        return ba;
-        */
     }
 
     public byte[] encodeRunLength(byte[] imageByteArray) throws IOException {
@@ -322,7 +291,7 @@ class ImageBasics extends Frame {
     public static void main(String[] args) {
 
         ImageBasics img = new ImageBasics();// instantiate this object
-        img.repaint();// render the image
+        // img.repaint();// render the image
         img.runLengthEncode();
 
     }// end main
