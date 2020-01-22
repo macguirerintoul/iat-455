@@ -165,7 +165,16 @@ class ImageManipulation extends Frame {
 	}
 
 	private int computeConvolve(int p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9) {
-		return p1 * (-1) + p2 * (-1) + p3 * (-1) + p4 * (-1) + p5 * 8 + p6 * (-1) + p7 * (-1) + p8 * (-1) + p9 * (-1);
+		int convolved = p1 * (-1) + p2 * (-1) + p3 * (-1) + p4 * (-1) + p5 * 8 + p6 * (-1) + p7 * (-1) + p8 * (-1)
+				+ p9 * (-1);
+
+		if (convolved < 0) {
+			return 0;
+		} else if (convolved > 255) {
+			return 255;
+		} else {
+			return convolved;
+		}
 	}
 
 	private int getValueAtCoords(int x, int y) {
@@ -182,30 +191,59 @@ class ImageManipulation extends Frame {
 		// write algorithm to perform edge detection based on spatial convolution, as
 		// described in lecture/textbook
 		// return a Bufferedimage = edgeDetectionImage
-		int width = testImage1.getWidth();
-		int height = testImage1.getHeight();
+		int width = image.getWidth();
+		int height = image.getHeight();
+
+		// set up a place to create the new image
+		WritableRaster wRaster = image.copyData(null);
+		BufferedImage copy = new BufferedImage(image.getColorModel(), wRaster, image.isAlphaPremultiplied(), null);
 
 		// for every pixel in the image...
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height; y++) {
+		for (int x = 1; x < width; x++) {
+			for (int y = 1; y < height; y++) {
 				// set up variables for the surrounding pixels
-				int p1, p2, p3, p4, p5, p6, p7, p8, p9;
+				int[] pixels = new int[9];
+				int[] reds = new int[9];
+				int[] greens = new int[9];
+				int[] blues = new int[9];
 
-				p1 = getValueAtCoords(x - 1, y - 1);
-				p2 = getValueAtCoords(x, y - 1);
-				p3 = getValueAtCoords(x + 1, y - 1);
+				pixels[0] = getValueAtCoords(x - 1, y - 1);
+				pixels[1] = getValueAtCoords(x, y - 1);
+				pixels[2] = getValueAtCoords(x + 1, y - 1);
 
-				p4 = getValueAtCoords(x - 1, y);
-				p5 = getValueAtCoords(x, y);
-				p6 = getValueAtCoords(x + 1, y);
+				pixels[3] = getValueAtCoords(x - 1, y);
+				pixels[4] = getValueAtCoords(x, y);
+				pixels[5] = getValueAtCoords(x + 1, y);
 
-				p7 = getValueAtCoords(x - 1, y + 1);
-				p8 = getValueAtCoords(x, y + 1);
-				p9 = getValueAtCoords(x + 1, y + 1);
+				pixels[6] = getValueAtCoords(x - 1, y + 1);
+				pixels[7] = getValueAtCoords(x, y + 1);
+				pixels[8] = getValueAtCoords(x + 1, y + 1);
+
+				for (int p = 0; p < pixels.length; p++) {
+					reds[p] = getRed(pixels[p]);
+					greens[p] = getGreen(pixels[p]);
+					blues[p] = getBlue(pixels[p]);
+				}
+
+				// calculate convolve for each channel
+				int convolveRed = computeConvolve(reds[0], reds[1], reds[2], reds[3], reds[4], reds[5], reds[6], reds[7],
+						reds[8]);
+				int convolveGreen = computeConvolve(greens[0], greens[1], greens[2], greens[3], greens[4], greens[5], greens[6],
+						greens[7], greens[8]);
+				int convolveBlue = computeConvolve(blues[0], blues[1], blues[2], blues[3], blues[4], blues[5], blues[6],
+						blues[7], blues[8]);
+
+				System.out.println(convolveRed);
+
+				int valueForPixel = new Color(convolveRed, convolveGreen, convolveBlue).getRGB();
+				copy.setRGB(x, y, valueForPixel);
 			}
 		}
+		// return the new image
+		return copy;
 
-		return filterImage(testImage, Filters.blank_image); // remove this line, when finished with the algorithm
+		// return filterImage(testImage, Filters.blank_image); // remove this line, when
+		// finished with the algorithm
 	}
 
 	public void paint(Graphics g) {
