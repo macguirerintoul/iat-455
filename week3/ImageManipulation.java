@@ -233,8 +233,6 @@ class ImageManipulation extends Frame {
 				int convolveBlue = computeConvolve(blues[0], blues[1], blues[2], blues[3], blues[4], blues[5], blues[6],
 						blues[7], blues[8]);
 
-				System.out.println(convolveRed);
-
 				int valueForPixel = new Color(convolveRed, convolveGreen, convolveBlue).getRGB();
 				copy.setRGB(x, y, valueForPixel);
 			}
