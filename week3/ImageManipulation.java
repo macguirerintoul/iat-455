@@ -45,7 +45,6 @@ class ImageManipulation extends Frame {
 		try {
 			testImage = ImageIO.read(new File("bird1.jpg"));
 			testImage1 = ImageIO.read(new File("church.jpg"));
-
 		} catch (Exception e) {
 			System.out.println("Cannot load the provided image");
 		}
@@ -150,12 +149,61 @@ class ImageManipulation extends Frame {
 		}
 	}
 
+	private int getRed(int rgb) {
+		Color c = new Color(rgb);
+		return c.getRed();
+	}
+
+	private int getGreen(int rgb) {
+		Color c = new Color(rgb);
+		return c.getGreen();
+	}
+
+	private int getBlue(int rgb) {
+		Color c = new Color(rgb);
+		return c.getBlue();
+	}
+
+	private int computeConvolve(int p1, int p2, int p3, int p4, int p5, int p6, int p7, int p8, int p9) {
+		return p1 * (-1) + p2 * (-1) + p3 * (-1) + p4 * (-1) + p5 * 8 + p6 * (-1) + p7 * (-1) + p8 * (-1) + p9 * (-1);
+	}
+
+	private int getValueAtCoords(int x, int y) {
+		try {
+			return testImage1.getRGB(x, y);
+		} catch (Exception e) {
+			return 0;
+		}
+	}
+
 	// Edge detection algorithm - spatial filtering by implementing the moving
 	// window manually
 	public BufferedImage convolve(BufferedImage image) {
 		// write algorithm to perform edge detection based on spatial convolution, as
 		// described in lecture/textbook
 		// return a Bufferedimage = edgeDetectionImage
+		int width = testImage1.getWidth();
+		int height = testImage1.getHeight();
+
+		// for every pixel in the image...
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				// set up variables for the surrounding pixels
+				int p1, p2, p3, p4, p5, p6, p7, p8, p9;
+
+				p1 = getValueAtCoords(x - 1, y - 1);
+				p2 = getValueAtCoords(x, y - 1);
+				p3 = getValueAtCoords(x + 1, y - 1);
+
+				p4 = getValueAtCoords(x - 1, y);
+				p5 = getValueAtCoords(x, y);
+				p6 = getValueAtCoords(x + 1, y);
+
+				p7 = getValueAtCoords(x - 1, y + 1);
+				p8 = getValueAtCoords(x, y + 1);
+				p9 = getValueAtCoords(x + 1, y + 1);
+			}
+		}
 
 		return filterImage(testImage, Filters.blank_image); // remove this line, when finished with the algorithm
 	}
