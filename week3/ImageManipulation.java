@@ -126,7 +126,13 @@ class ImageManipulation extends Frame {
 			return new Color(new_red, new_green, new_blue, alpha).getRGB();
 
 		case contrast: // O=(I-0.33)*3
-			// write code
+			// ternary operators to restrict the values to between 0 and 255
+			new_red = (int) ((red - 0.33 * 255) * 3 > 255 ? 255 : (red - 0.33 * 255) * 3 < 0 ? 0 : (red - 0.33 * 255) * 3);
+			new_green = (int) ((green - 0.33 * 255) * 3 > 255 ? 255
+					: (green - 0.33 * 255) * 3 < 0 ? 0 : (green - 0.33 * 255) * 3);
+			new_blue = (int) ((blue - 0.33 * 255) * 3 > 255 ? 255
+					: (blue - 0.33 * 255) * 3 < 0 ? 0 : (blue - 0.33 * 255) * 3);
+			return new Color(new_red, new_green, new_blue, alpha).getRGB();
 
 		case monochrome_average: // average R, G, B
 			// write code
