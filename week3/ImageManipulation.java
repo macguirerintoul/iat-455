@@ -102,18 +102,28 @@ class ImageManipulation extends Frame {
 		int green = (rgb >>> 8) & 0xff;
 		int blue = rgb & 0xff;
 
+		int new_red;
+		int new_green;
+		int new_blue;
+
 		switch (filt) {
 		case brightness: // O = I*2
-			int new_red = (red * 2 > 255) ? 255 : (red * 2);
-			int new_green = (green * 2 > 255) ? 255 : (green * 2);
-			int new_blue = (blue * 2 > 255) ? 255 : (blue * 2);
+			new_red = (red * 2 > 255) ? 255 : (red * 2);
+			new_green = (green * 2 > 255) ? 255 : (green * 2);
+			new_blue = (blue * 2 > 255) ? 255 : (blue * 2);
 			return new Color(new_red, new_green, new_blue, alpha).getRGB();
 
 		case RGBmultiply: // R=R*0.1, G=G*1.25, B=B*1
-			// write code
+			new_red = (int) (red * 0.1 > 255 ? 255 : red * 0.1);
+			new_green = (int) (green * 1.25 > 255 ? 255 : green * 1.25);
+			// blue does not need to be multiplied by 1
+			return new Color(new_red, new_green, blue, alpha).getRGB();
 
 		case invert: // O=1=I
-			// write code
+			new_red = 255 - red;
+			new_green = 255 - green;
+			new_blue = 255 - blue;
+			return new Color(new_red, new_green, new_blue, alpha).getRGB();
 
 		case contrast: // O=(I-0.33)*3
 			// write code
