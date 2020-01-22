@@ -135,10 +135,12 @@ class ImageManipulation extends Frame {
 			return new Color(new_red, new_green, new_blue, alpha).getRGB();
 
 		case monochrome_average: // average R, G, B
-			// write code
+			int avg = (red + green + blue) / 3;
+			return new Color(avg, avg, avg, alpha).getRGB();
 
 		case monochrome_perceptual: // human eye perception values
-			// write code
+			int human = (int) (red * 0.309 + green * 0.609 + blue * 0.082);
+			return new Color(human, human, human, alpha).getRGB();
 
 		case blank_image:
 			return rgb | 0xFFFFFFFF;
