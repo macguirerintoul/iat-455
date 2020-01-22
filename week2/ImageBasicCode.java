@@ -137,7 +137,7 @@ class ImageBasics extends Frame {
     try {
       testImage = ImageIO.read(new File("bird1.jpg"));
     } catch (Exception e) {
-      System.out.println("Cannot load the provided image");
+      System.out.println("Cannot load the provided image imagebasics");
     }
     this.setTitle("Week 2 workshop - RGB representation");
     this.setVisible(true);
