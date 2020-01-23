@@ -199,8 +199,8 @@ class ImageManipulation extends Frame {
 		BufferedImage copy = new BufferedImage(image.getColorModel(), wRaster, image.isAlphaPremultiplied(), null);
 
 		// for every pixel in the image...
-		for (int x = 1; x < width; x++) {
-			for (int y = 1; y < height; y++) {
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
 				// set up variables for the surrounding pixels
 				int[] pixels = new int[9];
 				int[] reds = new int[9];
