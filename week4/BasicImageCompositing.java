@@ -75,6 +75,7 @@ class BasicImageCompositing extends Frame {
         addImage = operate("add");
         subtractImage = operate("subtract");
         keymixImage = operate("keymix");
+        P1 = operate("p1");
     }
 
     public BufferedImage operate(String operation) {
@@ -112,7 +113,12 @@ class BasicImageCompositing extends Frame {
                     newG = (int) (getGreen(argb) * m + (1 - m) * getGreen(brgb));
                     newB = (int) (getBlue(argb) * m + (1 - m) * getBlue(brgb));
                     newRGB = new Color(clipChannelValue(newR), clipChannelValue(newG), clipChannelValue(newB)).getRGB();
-                    System.out.println(getRed(mrgb));
+                    break;
+                case "p1":
+                    newR = (int) (0.9 * getRed(argb) + (1 - 0.9) * getRed(brgb));
+                    newG = (int) (0.9 * getGreen(argb) + (1 - 0.9) * getGreen(brgb));
+                    newB = (int) (0.9 * getBlue(argb) + (1 - 0.9) * getBlue(brgb));
+                    newRGB = new Color(clipChannelValue(newR), clipChannelValue(newG), clipChannelValue(newB)).getRGB();
                     break;
                 default:
                     break;
@@ -173,7 +179,7 @@ class BasicImageCompositing extends Frame {
         g.drawString("Premultiplied", 175 + 6 * w, 45);
 
         g.drawImage(birdImage, 25, 180 + h, w, h, this);
-        g.drawImage(placeholderImage, 25 + w + 25, 180 + h, w, h, this);
+        g.drawImage(P1, 25 + w + 25, 180 + h, w, h, this);
         g.drawImage(placeholderImage, 25 + w * 2 + 50, 180 + h, w, h, this);
         g.drawImage(placeholderImage, 25 + w * 3 + 75, 180 + h, w, h, this);
         g.drawImage(placeholderImage, w * 4 + 125, 180 + h, w, h, this);
