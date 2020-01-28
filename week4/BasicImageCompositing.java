@@ -90,40 +90,38 @@ class BasicImageCompositing extends Frame {
                 int argb = birdImage.getRGB(x, y);
                 int brgb = boardImage.getRGB(x, y);
                 int mrgb = matteImage.getRGB(x, y);
-                int newR, newG, newB, newRGB;
-                newRGB = 0;
+                int newR = 0;
+                int newG = 0;
+                int newB = 0;
+                int newRGB = 0;
 
                 // check which operation was
                 switch (operation) {
                 case "add":
-                    newR = clipChannelValue(getRed(argb) + getRed(brgb));
-                    newG = clipChannelValue(getGreen(argb) + getGreen(brgb));
-                    newB = clipChannelValue(getBlue(argb) + getBlue(brgb));
-                    newRGB = new Color(newR, newG, newB).getRGB();
+                    newR = getRed(argb) + getRed(brgb);
+                    newG = getGreen(argb) + getGreen(brgb);
+                    newB = getBlue(argb) + getBlue(brgb);
                     break;
                 case "subtract":
-                    newR = clipChannelValue(Math.abs(getRed(argb) - getRed(brgb)));
-                    newG = clipChannelValue(Math.abs(getGreen(argb) - getGreen(brgb)));
-                    newB = clipChannelValue(Math.abs(getBlue(argb) - getBlue(brgb)));
-                    newRGB = new Color(newR, newG, newB).getRGB();
+                    newR = Math.abs(getRed(argb) - getRed(brgb));
+                    newG = Math.abs(getGreen(argb) - getGreen(brgb));
+                    newB = Math.abs(getBlue(argb) - getBlue(brgb));
                     break;
                 case "keymix":
                     float m = getRed(mrgb) / 255;
                     newR = (int) (getRed(argb) * m + (1 - m) * getRed(brgb));
                     newG = (int) (getGreen(argb) * m + (1 - m) * getGreen(brgb));
                     newB = (int) (getBlue(argb) * m + (1 - m) * getBlue(brgb));
-                    newRGB = new Color(clipChannelValue(newR), clipChannelValue(newG), clipChannelValue(newB)).getRGB();
                     break;
                 case "p1":
                     newR = (int) (0.9 * getRed(argb) + (1 - 0.9) * getRed(brgb));
                     newG = (int) (0.9 * getGreen(argb) + (1 - 0.9) * getGreen(brgb));
                     newB = (int) (0.9 * getBlue(argb) + (1 - 0.9) * getBlue(brgb));
-                    newRGB = new Color(clipChannelValue(newR), clipChannelValue(newG), clipChannelValue(newB)).getRGB();
                     break;
                 default:
                     break;
                 }
-
+                newRGB = new Color(clipChannelValue(newR), clipChannelValue(newG), clipChannelValue(newB)).getRGB();
                 outputImage.setRGB(x, y, newRGB);
             }
         }
