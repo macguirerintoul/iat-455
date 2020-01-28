@@ -75,6 +75,7 @@ class BasicImageCompositing extends Frame {
         addImage = operate("add");
         subtractImage = operate("subtract");
         keymixImage = operate("keymix");
+        premultipliedImage = operate("premultiplied");
         P1 = operate("p1");
     }
 
@@ -112,6 +113,11 @@ class BasicImageCompositing extends Frame {
                     newR = (int) (getRed(argb) * m + (1 - m) * getRed(brgb));
                     newG = (int) (getGreen(argb) * m + (1 - m) * getGreen(brgb));
                     newB = (int) (getBlue(argb) * m + (1 - m) * getBlue(brgb));
+                    break;
+                case "premultiplied":
+                    newR = getRed(argb) * getRed(mrgb) / 255;
+                    newG = getGreen(argb) * getGreen(mrgb) / 255;
+                    newB = getBlue(argb) * getBlue(mrgb) / 255;
                     break;
                 case "p1":
                     newR = (int) (0.9 * getRed(argb) + (1 - 0.9) * getRed(brgb));
@@ -163,7 +169,7 @@ class BasicImageCompositing extends Frame {
         g.drawImage(addImage, 25 + w * 3 + 75, 50, w, h, this);
         g.drawImage(subtractImage, w * 4 + 125, 50, w, h, this);
         g.drawImage(keymixImage, w * 5 + 150, 50, w, h, this);
-        g.drawImage(placeholderImage, w * 6 + 175, 50, w, h, this);
+        g.drawImage(premultipliedImage, w * 6 + 175, 50, w, h, this);
 
         g.setColor(Color.BLACK);
         Font f1 = new Font("Verdana", Font.PLAIN, 13);
