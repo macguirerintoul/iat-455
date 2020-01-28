@@ -78,6 +78,9 @@ class BasicImageCompositing extends Frame {
         premultipliedImage = operate("premultiplied");
         P1 = operate("dissolve", 0.9);
         P2 = operate("dissolve", 0.7);
+        P3 = operate("dissolve", 0.5);
+        P4 = operate("dissolve", 0.3);
+        P5 = operate("dissolve", 0.1);
     }
 
     public BufferedImage operate(String operation) {
@@ -190,9 +193,9 @@ class BasicImageCompositing extends Frame {
         g.drawImage(birdImage, 25, 180 + h, w, h, this);
         g.drawImage(P1, 25 + w + 25, 180 + h, w, h, this);
         g.drawImage(P2, 25 + w * 2 + 50, 180 + h, w, h, this);
-        g.drawImage(placeholderImage, 25 + w * 3 + 75, 180 + h, w, h, this);
-        g.drawImage(placeholderImage, w * 4 + 125, 180 + h, w, h, this);
-        g.drawImage(placeholderImage, w * 5 + 150, 180 + h, w, h, this);
+        g.drawImage(P3, 25 + w * 3 + 75, 180 + h, w, h, this);
+        g.drawImage(P4, w * 4 + 125, 180 + h, w, h, this);
+        g.drawImage(P5, w * 5 + 150, 180 + h, w, h, this);
         g.drawImage(boardImage, w * 6 + 175, 180 + h, w, h, this);
 
         g.drawString("Initial Image A", 25, 180 + h + h + 20);
