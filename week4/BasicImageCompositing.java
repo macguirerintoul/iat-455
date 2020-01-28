@@ -73,7 +73,12 @@ class BasicImageCompositing extends Frame {
         );// end addWindowListener
     }// end constructor
 
-    public void add() {
+    public void runAllOperations() {
+        addImage = operate("add");
+        subtractImage = operate("subtract");
+    }
+
+    public BufferedImage operate(String operation) {
 
         WritableRaster wRaster = birdImage.copyData(null);
         BufferedImage outputImage = new BufferedImage(birdImage.getColorModel(), wRaster,
@@ -85,16 +90,29 @@ class BasicImageCompositing extends Frame {
                 int argb = birdImage.getRGB(x, y);
                 int brgb = boardImage.getRGB(x, y);
 
-                int newR = clipChannelValue(getRed(argb) + getRed(brgb));
-                int newG = clipChannelValue(getGreen(argb) + getGreen(brgb));
-                int newB = clipChannelValue(getBlue(argb) + getBlue(brgb));
-
-                int newRGB = new Color(newR, newG, newB).getRGB();
+                int newR, newG, newB, newRGB;
+                newRGB = 0;
+                switch (operation) {
+                case "add":
+                    newR = clipChannelValue(getRed(argb) + getRed(brgb));
+                    newG = clipChannelValue(getGreen(argb) + getGreen(brgb));
+                    newB = clipChannelValue(getBlue(argb) + getBlue(brgb));
+                    newRGB = new Color(newR, newG, newB).getRGB();
+                    break;
+                case "subtract":
+                    newR = clipChannelValue(Math.abs(getRed(argb) - getRed(brgb)));
+                    newG = clipChannelValue(Math.abs(getGreen(argb) - getGreen(brgb)));
+                    newB = clipChannelValue(Math.abs(getBlue(argb) - getBlue(brgb)));
+                    newRGB = new Color(newR, newG, newB).getRGB();
+                default:
+                    break;
+                }
 
                 outputImage.setRGB(x, y, newRGB);
             }
         }
-        addImage = outputImage;
+
+        return outputImage;
     }
 
     // ========== helpers ========== //
@@ -129,7 +147,7 @@ class BasicImageCompositing extends Frame {
         g.drawImage(boardImage, 25 + w + 25, 50, w, h, this);
         g.drawImage(matteImage, 25 + w * 2 + 50, 50, w, h, this);
         g.drawImage(addImage, 25 + w * 3 + 75, 50, w, h, this);
-        g.drawImage(placeholderImage, w * 4 + 125, 50, w, h, this);
+        g.drawImage(subtractImage, w * 4 + 125, 50, w, h, this);
         g.drawImage(placeholderImage, w * 5 + 150, 50, w, h, this);
         g.drawImage(placeholderImage, w * 6 + 175, 50, w, h, this);
 
@@ -170,7 +188,7 @@ class BasicImageCompositing extends Frame {
     public static void main(String[] args) {
 
         BasicImageCompositing img = new BasicImageCompositing();// instantiate this object
-        img.add();
+        img.runAllOperations();
         img.repaint();// render the image
 
     }// end main
