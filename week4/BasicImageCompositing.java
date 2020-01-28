@@ -11,8 +11,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.lang.module.ModuleDescriptor.Builder;
-
 import javax.imageio.ImageIO;
 import java.awt.image.WritableRaster;
 
@@ -76,6 +74,7 @@ class BasicImageCompositing extends Frame {
     public void runAllOperations() {
         addImage = operate("add");
         subtractImage = operate("subtract");
+        keymixImage = operate("keymix");
     }
 
     public BufferedImage operate(String operation) {
@@ -89,9 +88,11 @@ class BasicImageCompositing extends Frame {
             for (int y = 0; y < height; y++) {
                 int argb = birdImage.getRGB(x, y);
                 int brgb = boardImage.getRGB(x, y);
-
+                int mrgb = matteImage.getRGB(x, y);
                 int newR, newG, newB, newRGB;
                 newRGB = 0;
+
+                // check which operation was
                 switch (operation) {
                 case "add":
                     newR = clipChannelValue(getRed(argb) + getRed(brgb));
@@ -104,6 +105,15 @@ class BasicImageCompositing extends Frame {
                     newG = clipChannelValue(Math.abs(getGreen(argb) - getGreen(brgb)));
                     newB = clipChannelValue(Math.abs(getBlue(argb) - getBlue(brgb)));
                     newRGB = new Color(newR, newG, newB).getRGB();
+                    break;
+                case "keymix":
+                    float m = getRed(mrgb) / 255;
+                    newR = (int) (getRed(argb) * m + (1 - m) * getRed(brgb));
+                    newG = (int) (getGreen(argb) * m + (1 - m) * getGreen(brgb));
+                    newB = (int) (getBlue(argb) * m + (1 - m) * getBlue(brgb));
+                    newRGB = new Color(clipChannelValue(newR), clipChannelValue(newG), clipChannelValue(newB)).getRGB();
+                    System.out.println(getRed(mrgb));
+                    break;
                 default:
                     break;
                 }
@@ -148,7 +158,7 @@ class BasicImageCompositing extends Frame {
         g.drawImage(matteImage, 25 + w * 2 + 50, 50, w, h, this);
         g.drawImage(addImage, 25 + w * 3 + 75, 50, w, h, this);
         g.drawImage(subtractImage, w * 4 + 125, 50, w, h, this);
-        g.drawImage(placeholderImage, w * 5 + 150, 50, w, h, this);
+        g.drawImage(keymixImage, w * 5 + 150, 50, w, h, this);
         g.drawImage(placeholderImage, w * 6 + 175, 50, w, h, this);
 
         g.setColor(Color.BLACK);
