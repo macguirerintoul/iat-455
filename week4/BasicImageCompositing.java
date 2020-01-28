@@ -76,10 +76,15 @@ class BasicImageCompositing extends Frame {
         subtractImage = operate("subtract");
         keymixImage = operate("keymix");
         premultipliedImage = operate("premultiplied");
-        P1 = operate("p1");
+        P1 = operate("dissolve", 0.9);
+        P2 = operate("dissolve", 0.7);
     }
 
     public BufferedImage operate(String operation) {
+        return operate(operation, 0.0);
+    }
+
+    public BufferedImage operate(String operation, double mv) {
 
         WritableRaster wRaster = birdImage.copyData(null);
         BufferedImage outputImage = new BufferedImage(birdImage.getColorModel(), wRaster,
@@ -119,10 +124,10 @@ class BasicImageCompositing extends Frame {
                     newG = getGreen(argb) * getGreen(mrgb) / 255;
                     newB = getBlue(argb) * getBlue(mrgb) / 255;
                     break;
-                case "p1":
-                    newR = (int) (0.9 * getRed(argb) + (1 - 0.9) * getRed(brgb));
-                    newG = (int) (0.9 * getGreen(argb) + (1 - 0.9) * getGreen(brgb));
-                    newB = (int) (0.9 * getBlue(argb) + (1 - 0.9) * getBlue(brgb));
+                case "dissolve":
+                    newR = (int) (mv * getRed(argb) + (1 - mv) * getRed(brgb));
+                    newG = (int) (mv * getGreen(argb) + (1 - mv) * getGreen(brgb));
+                    newB = (int) (mv * getBlue(argb) + (1 - mv) * getBlue(brgb));
                     break;
                 default:
                     break;
@@ -184,7 +189,7 @@ class BasicImageCompositing extends Frame {
 
         g.drawImage(birdImage, 25, 180 + h, w, h, this);
         g.drawImage(P1, 25 + w + 25, 180 + h, w, h, this);
-        g.drawImage(placeholderImage, 25 + w * 2 + 50, 180 + h, w, h, this);
+        g.drawImage(P2, 25 + w * 2 + 50, 180 + h, w, h, this);
         g.drawImage(placeholderImage, 25 + w * 3 + 75, 180 + h, w, h, this);
         g.drawImage(placeholderImage, w * 4 + 125, 180 + h, w, h, this);
         g.drawImage(placeholderImage, w * 5 + 150, 180 + h, w, h, this);
