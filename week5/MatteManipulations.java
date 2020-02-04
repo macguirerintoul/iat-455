@@ -94,7 +94,13 @@ class MatteManipulations extends Frame {
 				int blue2 = getBlue(pixel2);
 				switch (op) {
 				case multiply:
-					result.setRGB(x, y, new Color(clip(red1 * red2), clip(green1 * green2), clip(blue1 * blue2)).getRGB());
+					int newRed = clip((int) (red1 * ((double) red2 / 255)));
+					int newGreen = clip((int) (green1 * ((double) green2 / 255)));
+					int newBlue = clip((int) (blue1 * ((double) blue2 / 255)));
+					result.setRGB(x, y, new Color(newRed, newGreen, newBlue).getRGB());
+					break;
+				case add:
+					result.setRGB(x, y, new Color(clip(red1 + red2), clip(green1 + green2), clip(blue1 + blue2)).getRGB());
 					break;
 				default:
 					break;
@@ -129,8 +135,8 @@ class MatteManipulations extends Frame {
 
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				int pixel = invertedMatte.getRGB(x, y);
-				int matte = getBlue(pixel) - Math.max(getGreen(pixel), getRed(pixel));
+				int pixel = src.getRGB(x, y);
+				int matte = clip(getBlue(pixel) - Math.max(getGreen(pixel), getRed(pixel)));
 				invertedMatte.setRGB(x, y, new Color(matte, matte, matte).getRGB());
 			}
 		}
