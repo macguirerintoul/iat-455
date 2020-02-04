@@ -80,9 +80,27 @@ class MatteManipulations extends Frame {
 
 	public BufferedImage combineImages(BufferedImage src1, BufferedImage src2, Operations op) {
 		BufferedImage result = new BufferedImage(src1.getWidth(), src1.getHeight(), src1.getType());
+		for (int x = 0; x < src1.getWidth(); x++) {
+			for (int y = 0; y < src1.getHeight(); y++) {
+				int pixel1 = src1.getRGB(x, y);
+				int pixel2 = src2.getRGB(x, y);
 
-		// Write your code here
+				int red1 = getRed(pixel1);
+				int green1 = getGreen(pixel1);
+				int blue1 = getBlue(pixel1);
 
+				int red2 = getRed(pixel2);
+				int green2 = getGreen(pixel2);
+				int blue2 = getBlue(pixel2);
+				switch (op) {
+				case multiply:
+					result.setRGB(x, y, new Color(clip(red1 * red2), clip(green1 * green2), clip(blue1 * blue2)).getRGB());
+					break;
+				default:
+					break;
+				}
+			}
+		}
 		return result;
 	}
 
@@ -91,11 +109,14 @@ class MatteManipulations extends Frame {
 
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
-				int pixel = result.getRGB(x, y);
-				int blue = getBlue(pixel);
+				int pixel = src.getRGB(x, y);
+				int red = getRed(pixel);
 				int green = getGreen(pixel);
+				int blue = getBlue(pixel);
 				if (blue > green) {
-					result.setRGB(x, y, new Color(getRed(pixel), green, green).getRGB());
+					result.setRGB(x, y, new Color(red, green, green).getRGB());
+				} else {
+					result.setRGB(x, y, new Color(red, green, blue).getRGB());
 				}
 			}
 		}
@@ -106,7 +127,13 @@ class MatteManipulations extends Frame {
 	public BufferedImage createInvertedMatte(BufferedImage src) {
 		BufferedImage invertedMatte = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
 
-		// Write your code here
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				int pixel = invertedMatte.getRGB(x, y);
+				int matte = getBlue(pixel) - Math.max(getGreen(pixel), getRed(pixel));
+				invertedMatte.setRGB(x, y, new Color(matte, matte, matte).getRGB());
+			}
+		}
 
 		return invertedMatte;
 	}
@@ -199,7 +226,7 @@ class MatteManipulations extends Frame {
 	public static void main(String[] args) {
 
 		MatteManipulations img = new MatteManipulations();// instantiate this object
-		img.repaint();// render the image
+		// img.repaint();// render the image
 
 	}// end main
 }
