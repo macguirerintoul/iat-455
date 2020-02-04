@@ -160,24 +160,23 @@ class MatteManipulations extends Frame {
 
 	public BufferedImage over(BufferedImage foreground, BufferedImage matte, BufferedImage background) {
 		BufferedImage result = new BufferedImage(foreground.getWidth(), foreground.getHeight(), foreground.getType());
-		BufferedImage fgxm = combineImages(foreground, matte, Operations.multiply);
 
 		for (int x = 0; x < foreground.getWidth(); x++) {
 			for (int y = 0; y < foreground.getHeight(); y++) {
-				int fmR = getRed(fgxm.getRGB(x, y));
+				int fR = getRed(foreground.getRGB(x, y));
 				int bR = getRed(background.getRGB(x, y));
 				int mR = getRed(matte.getRGB(x, y));
-				int newR = clip((int) (fmR + bR - (bR * (double) mR)));
+				int newR = clip(fR * (mR / 255) + bR * (1 - (mR / 255)));
 
-				int fmG = getGreen(fgxm.getRGB(x, y));
+				int fG = getGreen(foreground.getRGB(x, y));
 				int bG = getGreen(background.getRGB(x, y));
 				int mG = getGreen(matte.getRGB(x, y));
-				int newG = clip(fmG + bG - (bG * mG));
+				int newG = clip(fG * (mG / 255) + bG * (1 - (mG / 255)));
 
-				int fmB = getBlue(fgxm.getRGB(x, y));
+				int fB = getBlue(foreground.getRGB(x, y));
 				int bB = getBlue(background.getRGB(x, y));
 				int mB = getBlue(matte.getRGB(x, y));
-				int newB = clip(fmB + bB - (bB * mB));
+				int newB = clip(fB * (mB / 255) + bB * (1 - (mB / 255)));
 
 				result.setRGB(x, y, new Color(newR, newG, newB).getRGB());
 			}
