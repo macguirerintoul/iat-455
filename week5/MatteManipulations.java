@@ -102,6 +102,12 @@ class MatteManipulations extends Frame {
 				case add:
 					result.setRGB(x, y, new Color(clip(red1 + red2), clip(green1 + green2), clip(blue1 + blue2)).getRGB());
 					break;
+				case subtract:
+					int newR = Math.abs(red1 - red2);
+					int newG = Math.abs(green1 - green2);
+					int newB = Math.abs(blue1 - blue2);
+					result.setRGB(x, y, new Color(newR, newG, newB).getRGB());
+					break;
 				default:
 					break;
 				}
@@ -153,17 +159,50 @@ class MatteManipulations extends Frame {
 	}
 
 	public BufferedImage over(BufferedImage foreground, BufferedImage matte, BufferedImage background) {
+		BufferedImage result = new BufferedImage(foreground.getWidth(), foreground.getHeight(), foreground.getType());
+		BufferedImage fgxm = combineImages(foreground, matte, Operations.multiply);
 
-		// Write your code here
+		for (int x = 0; x < foreground.getWidth(); x++) {
+			for (int y = 0; y < foreground.getHeight(); y++) {
+				int fmR = getRed(fgxm.getRGB(x, y));
+				int bR = getRed(background.getRGB(x, y));
+				int mR = getRed(matte.getRGB(x, y));
+				int newR = clip((int) (fmR + bR - (bR * (double) mR)));
 
-		// NOTE: You should change the return statement below to the actual result
-		return boardImage;
+				int fmG = getGreen(fgxm.getRGB(x, y));
+				int bG = getGreen(background.getRGB(x, y));
+				int mG = getGreen(matte.getRGB(x, y));
+				int newG = clip(fmG + bG - (bG * mG));
+
+				int fmB = getBlue(fgxm.getRGB(x, y));
+				int bB = getBlue(background.getRGB(x, y));
+				int mB = getBlue(matte.getRGB(x, y));
+				int newB = clip(fmB + bB - (bB * mB));
+
+				result.setRGB(x, y, new Color(newR, newG, newB).getRGB());
+			}
+		}
+
+		return result;
 	}
 
 	public BufferedImage improveMatte(BufferedImage src) {
 		BufferedImage matte = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
 
-		// Write your code here
+		/*
+		 * For each pixel, •Get its red/green/blue value •Get its HSB representation //
+		 * hsb[0], hsb[1], hsb[2] •float newBrightness= hsb[2] > 0.05 ? 1 : hsb[2] •int
+		 * newRgb= Color.HSBtoRGB(hsb[0], 0, brightness);
+		 */
+		for (int x = 0; x < src.getWidth(); x++) {
+			for (int y = 0; y < src.getHeight(); y++) {
+				int pixel = src.getRGB(x, y);
+				float[] hsb = Color.RGBtoHSB(getRed(pixel), getGreen(pixel), getBlue(pixel), null);
+				float newBrightness = hsb[2] > 0.05 ? 1 : hsb[2];
+				int newRGB = Color.HSBtoRGB(hsb[0], 0, newBrightness);
+				matte.setRGB(x, y, newRGB);
+			}
+		}
 
 		return matte;
 	}
