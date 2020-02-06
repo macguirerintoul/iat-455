@@ -13,7 +13,9 @@ import java.awt.Graphics;
 class Assignment1 extends Frame {
 	BufferedImage portrait;
 	BufferedImage background;
+	BufferedImage suppressed;
 	BufferedImage matte;
+	BufferedImage betterMatte;
 	BufferedImage composite;
 
 	int width; // width of the image
@@ -21,7 +23,7 @@ class Assignment1 extends Frame {
 
 	public Assignment1() {
 		try {
-			portrait = ImageIO.read(new File("portrait.jpg"));
+			portrait = ImageIO.read(new File("portrait-g.jpg"));
 			background = ImageIO.read(new File("background.jpg"));
 		} catch (Exception e) {
 			System.out.println("Cannot load the provided image");
@@ -72,7 +74,90 @@ class Assignment1 extends Frame {
 	}
 
 	private void question5() {
+		// suppressed = suppressToBlack(portrait);
+		matte = createMatte(portrait);
+		composite = over(portrait, background, matte);
+	}
 
+	public BufferedImage over(BufferedImage foreground, BufferedImage background, BufferedImage matte) {
+		BufferedImage result = new BufferedImage(foreground.getWidth(), foreground.getHeight(), foreground.getType());
+
+		for (int x = 0; x < foreground.getWidth(); x++) {
+			for (int y = 0; y < foreground.getHeight(); y++) {
+				int fR = getRed(foreground.getRGB(x, y));
+				int bR = getRed(background.getRGB(x, y));
+				int mR = getRed(matte.getRGB(x, y));
+				int newR = clip(fR * (mR / 255) + bR * (1 - (mR / 255)));
+
+				int fG = getGreen(foreground.getRGB(x, y));
+				int bG = getGreen(background.getRGB(x, y));
+				int mG = getGreen(matte.getRGB(x, y));
+				int newG = clip(fG * (mG / 255) + bG * (1 - (mG / 255)));
+
+				int fB = getBlue(foreground.getRGB(x, y));
+				int bB = getBlue(background.getRGB(x, y));
+				int mB = getBlue(matte.getRGB(x, y));
+				int newB = clip(fB * (mB / 255) + bB * (1 - (mB / 255)));
+
+				result.setRGB(x, y, new Color(newR, newG, newB).getRGB());
+			}
+		}
+
+		return result;
+	}
+
+	private int clip(int v) {
+		v = v > 255 ? 255 : v;
+		v = v < 0 ? 0 : v;
+		return v;
+	}
+
+	protected int getRed(int pixel) {
+		return (new Color(pixel)).getRed();
+	}
+
+	protected int getGreen(int pixel) {
+		return (new Color(pixel)).getGreen();
+	}
+
+	protected int getBlue(int pixel) {
+		return (new Color(pixel)).getBlue();
+	}
+
+	public BufferedImage suppressToBlack(BufferedImage src) {
+		BufferedImage result = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
+
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				int pixel = src.getRGB(x, y);
+				int red = getRed(pixel);
+				int green = getGreen(pixel);
+				int blue = getBlue(pixel);
+				if (green > blue) {
+					result.setRGB(x, y, new Color(red, blue, blue).getRGB());
+				} else {
+					result.setRGB(x, y, new Color(red, green, blue).getRGB());
+				}
+			}
+		}
+		return result;
+	}
+
+	public BufferedImage createMatte(BufferedImage src) {
+		BufferedImage matte = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				int pixel = src.getRGB(x, y);
+				int matteValue = 255 - clip(getGreen(pixel) - Math.max(getBlue(pixel), getRed(pixel)));
+				if (matteValue < 245) {
+					matteValue = 0;
+				} else {
+					matteValue = 255;
+				}
+				matte.setRGB(x, y, new Color(matteValue, matteValue, matteValue).getRGB());
+			}
+		}
+		return matte;
 	}
 
 	public void paint(Graphics g) {
@@ -83,18 +168,22 @@ class Assignment1 extends Frame {
 
 		this.setSize(w * 4 + 300, h * 1 + 150);
 
-		g.drawImage(portrait, 25, 50, w, h, this);
-		g.drawImage(background, 25 + w + 25, 50, w, h, this);
-		g.drawImage(matte, 25 + w + 25 + w, 50, w, h, this);
-		g.drawImage(composite, 25 + w + 25 + w + 25, 50, w, h, this);
-
-		g.setColor(Color.BLACK);
 		Font f1 = new Font("Verdana", Font.PLAIN, 13);
+		g.setColor(Color.BLACK);
 		g.setFont(f1);
+
 		g.drawString("Original portrait", 25, 45);
+		g.drawImage(portrait, 25, 50, w, h, this);
+
 		g.drawString("Original background", 50 + w, 45);
-		g.drawString("Matte of portrait", 72 + 2 * w, 45);
-		g.drawString("Final composite", 100 + 3 * w, 45);
+		g.drawImage(background, 2 * 25 + w, 50, w, h, this);
+
+		g.drawString("Matte", 72 + 2 * w, 45);
+		g.drawImage(matte, 4 * 25 + 2 * w, 50, w, h, this);
+
+		g.drawString("Composite", 100 + 3 * w, 45);
+		g.drawImage(composite, 6 * 25 + 3 * w, 50, w, h, this);
+
 	}
 
 	public static void main(String[] args) {
