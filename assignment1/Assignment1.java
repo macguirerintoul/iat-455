@@ -31,7 +31,7 @@ class Assignment1 extends Frame {
 	public Assignment1() {
 		try {
 			// Load the base images from disk
-			portrait = ImageIO.read(new File("portrait-g.jpg"));
+			portrait = ImageIO.read(new File("portrait.jpg"));
 			background = ImageIO.read(new File("background.jpg"));
 		} catch (Exception e) {
 			// If images can't be found or something else goes wrong, print a message
