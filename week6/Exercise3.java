@@ -42,7 +42,7 @@ class Exercise3 extends Frame {
 		height = cover.getHeight();
 		encodedImage = encodeMessage(cover, message);
 		fourBitImage = reduceTo4Bits(encodedImage); // WRITE YOUR OWN reduceTo2Bits(srcImage);
-		brightImage = modifyBrightness(fourBitImage, 10); // WRITE YOUR OWN modifyBrightness(twoBitImage, 85);
+		brightImage = modifyBrightness(fourBitImage, 15); // WRITE YOUR OWN modifyBrightness(twoBitImage, 85);
 
 		// Anonymous inner-class listener to terminate program
 		this.addWindowListener(new WindowAdapter() {// anonymous class definition
@@ -72,9 +72,15 @@ class Exercise3 extends Frame {
 				int coverRGB = cover.getRGB(x, y);
 				int messageRGB = message.getRGB(x, y);
 				int newCoverRGB = coverRGB & 0xFFF0F0F0;
-				int newMessageRGB = messageRGB & 0xFF0F0F0F;
-				int newRGB = newCoverRGB | newMessageRGB;
-				result.setRGB(x, y, newRGB);
+				int newMessageRGB = messageRGB & 0xFFF0F0F0;
+				String newCoverInBinary = Integer.toBinaryString(newCoverRGB);
+				String newMessageInBinary = Integer.toBinaryString(newMessageRGB);
+
+				int r = Integer.parseInt(newCoverInBinary.substring(8, 12) + newMessageInBinary.substring(8, 12), 2);
+				int g = Integer.parseInt(newCoverInBinary.substring(16, 20) + newMessageInBinary.substring(16, 20), 2);
+				int b = Integer.parseInt(newCoverInBinary.substring(24, 28) + newMessageInBinary.substring(24, 28), 2);
+
+				result.setRGB(x, y, new Color(r, g, b).getRGB());
 			}
 		}
 		return result;
