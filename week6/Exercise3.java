@@ -42,7 +42,7 @@ class Exercise3 extends Frame {
 		height = cover.getHeight();
 		encodedImage = encodeMessage(cover, message);
 		fourBitImage = reduceTo4Bits(encodedImage); // WRITE YOUR OWN reduceTo2Bits(srcImage);
-		brightImage = modifyBrightness(fourBitImage, 85); // WRITE YOUR OWN modifyBrightness(twoBitImage, 85);
+		brightImage = modifyBrightness(fourBitImage, 10); // WRITE YOUR OWN modifyBrightness(twoBitImage, 85);
 
 		// Anonymous inner-class listener to terminate program
 		this.addWindowListener(new WindowAdapter() {// anonymous class definition
@@ -101,7 +101,7 @@ class Exercise3 extends Frame {
 				int g = getGreen(rgb);
 				int b = getBlue(rgb);
 				float hsb[] = Color.RGBtoHSB(r, g, b, null);
-				float newBrightness = hsb[2] * 85;
+				float newBrightness = hsb[2] * multiplier;
 				result.setRGB(x, y, Color.HSBtoRGB(hsb[0], hsb[1], newBrightness));
 			}
 		}

@@ -88,7 +88,7 @@ class Exercise1 extends Frame {
 				int g = getGreen(rgb);
 				int b = getBlue(rgb);
 				float hsb[] = Color.RGBtoHSB(r, g, b, null);
-				float newBrightness = hsb[2] * 85;
+				float newBrightness = hsb[2] * multiplier;
 				result.setRGB(x, y, Color.HSBtoRGB(hsb[0], hsb[1], newBrightness));
 			}
 		}
