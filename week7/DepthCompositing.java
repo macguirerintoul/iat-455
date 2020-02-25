@@ -87,11 +87,20 @@ class DepthCompositing extends Frame {
 		// If forest_depthis brighter, use forest as result rgb
 		for (int x = 0; x < src1.getWidth(); x++) {
 			for (int y = 0; y < src1.getHeight(); y++) {
-				int s1rgb = src1.getRGB(x, y);
-				int s2rgb = src2.getRGB(x, y);
+				int s1 = src1.getRGB(x, y);
+				int s2 = src2.getRGB(x, y);
 
-				float[] s1pixel = Color.RGBtoHSB(getRed(s1rgb), getGreen(s1rgb), getBlue(s1rgb), null);
-				float[] s2pixel = Color.RGBtoHSB(getRed(s2rgb), getGreen(s2rgb), getBlue(s2rgb), null);
+				int z1 = src1_depth.getRGB(x, y);
+				int z2 = src2_depth.getRGB(x, y);
+
+				float[] depth1 = Color.RGBtoHSB(getRed(z1), getGreen(z1), getBlue(z1), null);
+				float[] depth2 = Color.RGBtoHSB(getRed(z2), getGreen(z2), getBlue(z2), null);
+
+				if (depth1[2] > depth2[2]) {
+					result.setRGB(x, y, s1);
+				} else {
+					result.setRGB(x, y, s2);
+				}
 			}
 		}
 		return result;
