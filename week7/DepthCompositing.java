@@ -59,7 +59,7 @@ class DepthCompositing extends Frame {
 		height_car = carImg.getHeight();
 
 		compositeImage = composite(bubblesImg, forestImg, bubbles_depthImg, forest_depthImg);
-		fogImage = carImg; // addFog(carImg, car_depthImg, 100); // You need to write the addFog method
+		fogImage = addFog(carImg, car_depthImg, 100); // You need to write the addFog method
 
 		// keymixImage = keymixImages(birdImage, boardImage, matteImage);
 		// premultipliedImage = combineImages(birdImage, matteImage,
@@ -90,13 +90,13 @@ class DepthCompositing extends Frame {
 				int s1 = src1.getRGB(x, y);
 				int s2 = src2.getRGB(x, y);
 
-				int z1 = src1_depth.getRGB(x, y);
-				int z2 = src2_depth.getRGB(x, y);
+				int z1rgb = src1_depth.getRGB(x, y);
+				int z2rgb = src2_depth.getRGB(x, y);
 
-				float[] depth1 = Color.RGBtoHSB(getRed(z1), getGreen(z1), getBlue(z1), null);
-				float[] depth2 = Color.RGBtoHSB(getRed(z2), getGreen(z2), getBlue(z2), null);
+				float[] z1 = Color.RGBtoHSB(getRed(z1rgb), getGreen(z1rgb), getBlue(z1rgb), null);
+				float[] z2 = Color.RGBtoHSB(getRed(z2rgb), getGreen(z2rgb), getBlue(z2rgb), null);
 
-				if (depth1[2] > depth2[2]) {
+				if (z1[2] > z2[2]) {
 					result.setRGB(x, y, s1);
 				} else {
 					result.setRGB(x, y, s2);
@@ -106,7 +106,31 @@ class DepthCompositing extends Frame {
 		return result;
 	}
 
-	// Write the addFog method here
+	private BufferedImage addFog(BufferedImage src, BufferedImage depth, int intensity) {
+		BufferedImage result = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
+		// For each pixel,
+		// Get the rgbvalues of the src(carImg) & depth (car_depthImg)
+		// Calculate the normalized brightness value of depth pixel
+		// New_red= red * normalized + intensity * (1-normalized)
+		// New_green=...
+		// New_blue= ...
+
+		for (int x = 0; x < src.getWidth(); x++) {
+			for (int y = 0; y < src.getHeight(); y++) {
+				int imageRGB = src.getRGB(x, y);
+				int depthRGB = depth.getRGB(x, y);
+				float[] depthHSV = Color.RGBtoHSB(getRed(depthRGB), getGreen(depthRGB), getBlue(depthRGB), null);
+				float depthNormalized = depthHSV[2];
+
+				int newRed = (int) (getRed(imageRGB) * depthNormalized + intensity * (1 - depthNormalized));
+				int newGreen = (int) (getGreen(imageRGB) * depthNormalized + intensity * (1 - depthNormalized));
+				int newBlue = (int) (getBlue(imageRGB) * depthNormalized + intensity * (1 - depthNormalized));
+
+				result.setRGB(x, y, new Color(newRed, newGreen, newBlue).getRGB());
+			}
+		}
+		return result;
+	}
 
 	protected int getRed(int pixel) {
 		return (pixel >>> 16) & 0xFF;
