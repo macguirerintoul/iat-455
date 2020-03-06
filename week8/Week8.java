@@ -53,10 +53,10 @@ class Week8 extends Frame { // controlling class
 		shadows = combineImages(carImage, occlusion, Operations.multiply);
 
 		// 6 Creating a new image of the desired color
-		newColor_image = carImage;
+		newColor_image = createUniformColor(height, width, carImage.getType(), 125, 125, 200);
 
 		// 7 Creating the colored paint mask
-		paint_changed_mask = carImage;
+		paint_changed_mask = combineImages(paint_mask, newColor_image, Operations.multiply);
 
 		// 8 Performing over operation
 		color_corrected = carImage;
@@ -121,7 +121,11 @@ class Week8 extends Frame { // controlling class
 
 	public BufferedImage createUniformColor(int height, int width, int imageType, int red, int green, int blue) {
 		BufferedImage result = new BufferedImage(width, height, imageType);
-
+		for (int x = 0; x < width; x++) {
+			for (int y = 0; y < height; y++) {
+				result.setRGB(x, y, new Color(red, green, blue).getRGB());
+			}
+		}
 		return result;
 	}
 
@@ -131,7 +135,21 @@ class Week8 extends Frame { // controlling class
 
 	public BufferedImage invert(BufferedImage src) {
 		BufferedImage result = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
+		for (int x = 0; x < src1.getWidth(); x++) {
+			for (int y = 0; y < src1.getHeight(); y++) {
+				int pixel = src.getRGB(x, y);
 
+				int red = getRed(pixel);
+				int green = getGreen(pixel);
+				int blue = getBlue(pixel);
+
+				int new_red = 255 - red;
+				int new_green = 255 - green;
+				int new_blue = 255 - blue;
+
+				result.setRGB(x, y, new Color(new_red, new_green, new_blue).getRGB());
+			}
+		}
 		return result;
 	}
 
