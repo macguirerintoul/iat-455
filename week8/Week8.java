@@ -59,21 +59,21 @@ class Week8 extends Frame { // controlling class
 		paint_changed_mask = combineImages(paint_mask, newColor_image, Operations.multiply);
 
 		// 8 Performing over operation
-		color_corrected = carImage;
+		color_corrected = over(paint_mask, shadows, paint_changed_mask);
 
 		// 9 Reflection mask
-		paint_mask_refl = carImage;
+		paint_mask_refl = combineImages(paint_changed_mask, reflection_layer, Operations.multiply);
 
 		// 10 Over operation like step 8, but with colored reflection mask
-		refl = carImage;
+		refl = over(paint_mask, shadows, paint_mask_refl);
 
 		// 11 Over operation like step 8, but with reflection mask
-		shiny = carImage;
+		shiny = over(paint_mask, shadows, reflection_layer);
 
 		// 12 Over operation like step 8, but using a dark color
-		BufferedImage dark = createUniformColor(height, width, carImage.getType(), 1, 0, 0);
-		BufferedImage changedPaintMask2 = carImage;
-		comp = carImage;
+		BufferedImage blackImage = createUniformColor(height, width, carImage.getType(), 0, 0, 0);
+		BufferedImage changedPaintMask2 = combineImages(blackImage, paint_mask, Operations.multiply);
+		comp = over(paint_mask, shadows, changedPaintMask2);
 
 		// Anonymous inner-class listener to terminate program
 		this.addWindowListener(new WindowAdapter() {// anonymous class definition
@@ -104,11 +104,19 @@ class Week8 extends Frame { // controlling class
 				int green2 = getGreen(pixel2);
 				int blue2 = getBlue(pixel2);
 
+				int newRed, newGreen, newBlue = 0;
+
 				switch (op) {
 					case multiply:
-						int newRed = clip((int) (red1 * ((double) red2 / 255)));
-						int newGreen = clip((int) (green1 * ((double) green2 / 255)));
-						int newBlue = clip((int) (blue1 * ((double) blue2 / 255)));
+						newRed = clip((int) (red1 * ((double) red2 / 255)));
+						newGreen = clip((int) (green1 * ((double) green2 / 255)));
+						newBlue = clip((int) (blue1 * ((double) blue2 / 255)));
+						result.setRGB(x, y, new Color(newRed, newGreen, newBlue).getRGB());
+						break;
+					case add:
+						newRed = clip(red1 + red2);
+						newGreen = clip(green1 + green2);
+						newBlue = clip(blue1 + blue2);
 						result.setRGB(x, y, new Color(newRed, newGreen, newBlue).getRGB());
 						break;
 					default:
@@ -130,13 +138,17 @@ class Week8 extends Frame { // controlling class
 	}
 
 	public BufferedImage over(BufferedImage paintMatte, BufferedImage shadowsAdded, BufferedImage changedPaintMask) {
-		return carImage; // CHANGE THIS!
+
+		BufferedImage invertedMatte = invert(paintMatte);
+		BufferedImage bg = combineImages(shadowsAdded, invertedMatte, Operations.multiply);
+		BufferedImage result = combineImages(bg, changedPaintMask, Operations.add);
+		return result;
 	}
 
 	public BufferedImage invert(BufferedImage src) {
 		BufferedImage result = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
-		for (int x = 0; x < src1.getWidth(); x++) {
-			for (int y = 0; y < src1.getHeight(); y++) {
+		for (int x = 0; x < src.getWidth(); x++) {
+			for (int y = 0; y < src.getHeight(); y++) {
 				int pixel = src.getRGB(x, y);
 
 				int red = getRed(pixel);
