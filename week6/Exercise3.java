@@ -130,8 +130,8 @@ class Exercise3 extends Frame {
 		Font f1 = new Font("Verdana", Font.PLAIN, 13);
 		g.setFont(f1);
 		g.drawString("Original Image", 25, 45);
-		g.drawString("2 bits per channel", 25 + w + 45, 45);
-		g.drawString("Brightness * 85 = Result Image", 25 + w * 2 + 85, 45);
+		g.drawString("4 bits per channel", 25 + w + 45, 45);
+		g.drawString("Brightness * 15 = Result Image", 25 + w * 2 + 85, 45);
 	}
 	// =======================================================//
 
