@@ -155,7 +155,18 @@ class Week9 extends Frame { // controlling class
 	public BufferedImage colorCorrect(BufferedImage src, BufferedImage bg) {
 		BufferedImage result = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
 
-		// TODO: Complete this code
+		for (int x = 0; x < src.getWidth(); x++) {
+			for (int y = 0; y < src.getHeight(); y++) {
+				int bg_rgb = bg.getRGB(x, y);
+				int src_rgb = src.getRGB(x, y);
+				float[] bg_hsb = Color.RGBtoHSB(getRed(bg_rgb), getGreen(bg_rgb), getBlue(bg_rgb), null);
+				float[] src_hsb = Color.RGBtoHSB(getRed(src_rgb), getGreen(src_rgb), getBlue(src_rgb), null);
+
+				int corrected = Color.HSBtoRGB(bg_hsb[0], bg_hsb[1], src_hsb[2]);
+
+				result.setRGB(x, y, new Color(corrected).getRGB());
+			}
+		}
 
 		return result;
 	}
