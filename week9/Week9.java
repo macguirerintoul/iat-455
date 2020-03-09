@@ -65,10 +65,10 @@ class Week9 extends Frame { // controlling class
 
 		coloredEdges = combineImages(colorCorrected, edge_mask, Operations.multiply);
 
-		BufferedImage edgelessStatue = statueImg; // TODO: replace the statueImg with proper method call
-		shadedStatue = statueImg; // TODO: replace the statueImg with proper method call
+		BufferedImage edgelessStatue = combineImages(invert(edge_mask), statueImg, Operations.multiply);
+		shadedStatue = combineImages(coloredEdges, edgelessStatue, Operations.add);
 
-		finalResult = statueImg; // TODO: replace the statueImg with proper method call
+		finalResult = over(shadedStatue, statueMatte, backgroundImg);
 
 		// Anonymous inner-class listener to terminate program
 		this.addWindowListener(new WindowAdapter() {// anonymous class definition
@@ -101,10 +101,15 @@ class Week9 extends Frame { // controlling class
 				red2 = getRed(pixel2);
 				green2 = getGreen(pixel2);
 				blue2 = getBlue(pixel2);
+				Color newPixel;
 
 				switch (op) {
 					case multiply:
-						Color newPixel = new Color(clip(red1 * red2 / 255), clip(green1 * green2 / 255), clip(blue1 * blue2 / 255));
+						newPixel = new Color(clip(red1 * red2 / 255), clip(green1 * green2 / 255), clip(blue1 * blue2 / 255));
+						result.setRGB(x, y, newPixel.getRGB());
+						break;
+					case add:
+						newPixel = new Color(clip(red1 + red2), clip(green1 + green2), clip(blue1 + blue2));
 						result.setRGB(x, y, newPixel.getRGB());
 						break;
 					default:
@@ -197,17 +202,28 @@ class Week9 extends Frame { // controlling class
 
 	public BufferedImage invert(BufferedImage src) {
 		BufferedImage result = new BufferedImage(src.getWidth(), src.getHeight(), src.getType());
+		for (int x = 0; x < src.getWidth(); x++) {
+			for (int y = 0; y < src.getHeight(); y++) {
+				int pixel, red, green, blue;
+				pixel = src.getRGB(x, y);
+				red = getRed(pixel);
+				green = getGreen(pixel);
+				blue = getBlue(pixel);
 
-		// TODO: Complete this code
-
+				int new_red = 255 - red;
+				int new_green = 255 - green;
+				int new_blue = 255 - blue;
+				result.setRGB(x, y, new Color(new_red, new_green, new_blue).getRGB());
+			}
+		}
 		return result;
 	}
 
 	public BufferedImage over(BufferedImage foreground, BufferedImage matte, BufferedImage background) {
-
-		// TODO: Complete this code
-
-		return background; // TODO: Replace background here with the result of the over method
+		BufferedImage fore = combineImages(foreground, matte, Operations.multiply);
+		BufferedImage invertedMatte = invert(matte);
+		BufferedImage back = combineImages(background, invertedMatte, Operations.multiply);
+		return combineImages(fore, back, Operations.add);
 	}
 
 	private int clip(int v) {
