@@ -63,7 +63,7 @@ class Week9 extends Frame { // controlling class
 
 		colorCorrected = colorCorrect(statueImg, blurred);
 
-		coloredEdges = statueImg; // TODO: replace the statueImg with proper method call
+		coloredEdges = combineImages(colorCorrected, edge_mask, Operations.multiply);
 
 		BufferedImage edgelessStatue = statueImg; // TODO: replace the statueImg with proper method call
 		shadedStatue = statueImg; // TODO: replace the statueImg with proper method call
@@ -85,9 +85,33 @@ class Week9 extends Frame { // controlling class
 			System.out.println("Source Images should be of the same type");
 			return null;
 		}
+
 		BufferedImage result = new BufferedImage(src1.getWidth(), src1.getHeight(), src1.getType());
 
-		// TODO: Complete this code
+		int pixel1, red1, green1, blue1, pixel2, red2, green2, blue2;
+
+		for (int x = 0; x < src1.getWidth(); x++) {
+			for (int y = 0; y < src1.getHeight(); y++) {
+				pixel1 = src1.getRGB(x, y);
+				red1 = getRed(pixel1);
+				green1 = getGreen(pixel1);
+				blue1 = getBlue(pixel1);
+
+				pixel2 = src2.getRGB(x, y);
+				red2 = getRed(pixel2);
+				green2 = getGreen(pixel2);
+				blue2 = getBlue(pixel2);
+
+				switch (op) {
+					case multiply:
+						Color newPixel = new Color(clip(red1 * red2 / 255), clip(green1 * green2 / 255), clip(blue1 * blue2 / 255));
+						result.setRGB(x, y, newPixel.getRGB());
+						break;
+					default:
+						break;
+				}
+			}
+		}
 
 		return result;
 	}
