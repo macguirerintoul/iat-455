@@ -136,10 +136,10 @@ class Week9 extends Frame { // controlling class
 	}
 
 	public BufferedImage blur(BufferedImage image) {
-
-		// TODO: Complete this code
-
-		return image; // TODO: replace image with the blured image
+		float data[] = { 0.0625f, 0.125f, 0.0625f, 0.125f, 0.125f, 0.125f, 0.0625f, 0.125f, 0.0625f };
+		Kernel kernel = new Kernel(3, 3, data);
+		ConvolveOp convolve = new ConvolveOp(kernel, ConvolveOp.EDGE_NO_OP, null);
+		return convolve.filter(image, null);
 	}
 
 	public static BufferedImage copyImg(BufferedImage input) {
